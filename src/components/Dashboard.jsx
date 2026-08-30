@@ -1,4 +1,10 @@
-function Dashboard({ savedOpportunities }) {
+function Dashboard({ savedOpportunities, applications }) {
+  const getApplicationCount = (status) => {
+    return applications.filter(
+      (application) => application.status === status
+    ).length;
+  };
+
   return (
     <main className="dashboard">
       <h1>Dashboard</h1>
@@ -44,11 +50,67 @@ function Dashboard({ savedOpportunities }) {
       </section>
 
       <section className="dashboard-section">
-        <h2>Applications in Progress</h2>
+        <h2>Applications</h2>
 
-        <p>
-          Application tracking will be available in a later step.
-        </p>
+        {applications.length > 0 ? (
+          <>
+            <p>
+              You are currently tracking{" "}
+              {applications.length}{" "}
+              {applications.length === 1
+                ? "application."
+                : "applications."}
+            </p>
+
+            <div className="application-summary">
+              <div className="application-summary-item">
+                <span>Interested</span>
+                <strong>
+                  {getApplicationCount("Interested")}
+                </strong>
+              </div>
+
+              <div className="application-summary-item">
+                <span>Applied</span>
+                <strong>
+                  {getApplicationCount("Applied")}
+                </strong>
+              </div>
+
+              <div className="application-summary-item">
+                <span>Shortlisted</span>
+                <strong>
+                  {getApplicationCount("Shortlisted")}
+                </strong>
+              </div>
+
+              <div className="application-summary-item">
+                <span>Interview</span>
+                <strong>
+                  {getApplicationCount("Interview")}
+                </strong>
+              </div>
+
+              <div className="application-summary-item">
+                <span>Selected</span>
+                <strong>
+                  {getApplicationCount("Selected")}
+                </strong>
+              </div>
+
+              <div className="application-summary-item">
+                <span>Rejected</span>
+                <strong>
+                  {getApplicationCount("Rejected")}
+                </strong>
+              </div>
+            </div>
+          </>
+        ) : (
+          <p>
+            You are not tracking any applications yet.
+          </p>
+        )}
       </section>
 
       <section className="dashboard-section">
