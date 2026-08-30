@@ -109,35 +109,79 @@ body {
 
 
 /* =========================
-   Category Filter
+   Filters
    ========================= */
 
-.category-filter {
+.filters-section {
+  margin-top: 28px;
+  max-width: 650px;
+}
+
+.filters-section h2 {
+  margin: 0 0 14px;
+  font-size: 18px;
+}
+
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.filter-control {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  margin-top: 20px;
-  max-width: 220px;
 }
 
-.category-filter label {
+.filter-control label {
   font-size: 14px;
   font-weight: 600;
 }
 
-.category-filter select {
+.filter-control select,
+.filter-control input {
+  width: 100%;
   padding: 10px 12px;
   border: 1px solid #d1d5db;
   border-radius: 6px;
   background: white;
   color: #1f2937;
   font-size: 15px;
+  box-sizing: border-box;
+}
+
+.filter-control select {
   cursor: pointer;
 }
 
-.category-filter select:focus {
+.filter-control select:focus,
+.filter-control input:focus {
   outline: 2px solid #bfdbfe;
   border-color: #2563eb;
+}
+
+
+/* Clear Filters Button */
+
+.clear-filters-button {
+  margin-top: 16px;
+  padding: 10px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  color: #1f2937;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.clear-filters-button:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
 }
 
 
@@ -444,10 +488,14 @@ body {
   }
 
 
-  /* Category */
+  /* Filters */
 
-  .category-filter {
+  .filters-section {
     max-width: 100%;
+  }
+
+  .filters-grid {
+    grid-template-columns: 1fr;
   }
 
 
@@ -483,4 +531,16 @@ body {
   .opportunity-details-actions button {
     width: 100%;
   }
+}
+.filter-status {
+  margin-top: 14px;
+  font-size: 14px;
+  color: #6b7280;
+}
+.result-count {
+  margin-top: 24px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
 }
