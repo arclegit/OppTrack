@@ -4,45 +4,97 @@ import HomePage from "./components/HomePage";
 import SavedOpportunities from "./components/SavedOpportunities";
 import Dashboard from "./components/Dashboard";
 
+const API_URL = "http://localhost:5000/api";
+
 function App() {
   const [currentView, setCurrentView] = useState("discover");
 
-  const [selectedOpportunity, setSelectedOpportunity] = useState(null);
+  const [selectedOpportunity, setSelectedOpportunity] =
+    useState(null);
 
-  const [savedOpportunities, setSavedOpportunities] = useState(() => {
-    const saved = localStorage.getItem("oppTrackSavedOpportunities");
+  const [savedOpportunities, setSavedOpportunities] =
+    useState([]);
 
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [applications, setApplications] = useState([]);
+  
 
-  const [applications, setApplications] = useState(() => {
-    const savedApplications = localStorage.getItem(
-      "oppTrackApplications"
-    );
-
-    return savedApplications ? JSON.parse(savedApplications) : [];
-  });
-
+  // Load saved opportunities from PostgreSQL
   useEffect(() => {
-    localStorage.setItem(
-      "oppTrackSavedOpportunities",
-      JSON.stringify(savedOpportunities)
-    );
-  }, [savedOpportunities]);
+    const loadSavedOpportunities = async () => {
+      try {
+        const response = await fetch(
+          `${API_URL}/saved-opportunities`
+        );
 
+        if (!response.ok) {
+          throw new Error(
+            "Failed to fetch saved opportunities"
+          );
+        }
+
+        const data = await response.json();
+
+        setSavedOpportunities(data);
+      } catch (error) {
+        console.error(
+          "Error loading saved opportunities:",
+          error
+        );
+      }
+    };
+
+    loadSavedOpportunities();
+  }, []);
+
+  // Load applications from PostgreSQL
   useEffect(() => {
-    localStorage.setItem(
-      "oppTrackApplications",
-      JSON.stringify(applications)
-    );
-  }, [applications]);
+    const loadApplications = async () => {
+      try {
+        const response = await fetch(
+          `${API_URL}/applications`
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            "Failed to fetch applications"
+          );
+        }
+
+        const data = await response.json();
+
+        const formattedApplications = data.map(
+          (application) => ({
+            id: application.id,
+            opportunityId:
+              application.opportunityId,
+            status: application.status,
+            appliedDate:
+              application.appliedDate || null,
+            notes: application.notes || "",
+            followUpDate:
+              application.followUpDate || null
+          })
+        );
+
+        setApplications(formattedApplications);
+      } catch (error) {
+        console.error(
+          "Error loading applications:",
+          error
+        );
+      }
+    };
+
+    loadApplications();
+  }, []);
 
   const handleViewOpportunity = (opportunity) => {
     setSelectedOpportunity(opportunity);
     setCurrentView("discover");
   };
 
-  const handleTrackApplication = (opportunity) => {
+  // Create application
+  const handleTrackApplication = async (opportunity) => {
     const alreadyTracked = applications.some(
       (application) =>
         application.opportunityId === opportunity.id
@@ -60,72 +112,332 @@ function App() {
       followUpDate: null
     };
 
-    setApplications([
-      ...applications,
-      newApplication
-    ]);
+    try {
+      const response = await fetch(
+        `${API_URL}/applications`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(newApplication)
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.error ||
+            "Failed to create application"
+        );
+      }
+
+      const formattedApplication = {
+        id: data.id,
+        opportunityId:
+          data.opportunityId,
+        status: data.status,
+        appliedDate:
+          data.appliedDate || null,
+        notes: data.notes || "",
+        followUpDate:
+          data.followUpDate || null
+      };
+
+      setApplications((previousApplications) => [
+        ...previousApplications,
+        formattedApplication
+      ]);
+    } catch (error) {
+      console.error(
+        "Error creating application:",
+        error
+      );
+    }
   };
 
-  const handleApplicationStatusChange = (
+  // Update an application
+  const updateApplication = async (
+    application,
+    changes
+  ) => {
+    const updatedApplication = {
+      status: application.status,
+      appliedDate: application.appliedDate,
+      notes: application.notes,
+      followUpDate: application.followUpDate,
+      ...changes
+    };
+
+    try {
+      const response = await fetch(
+        `${API_URL}/applications/${application.id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(
+            updatedApplication
+          )
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.error ||
+            "Failed to update application"
+        );
+      }
+
+      const formattedApplication = {
+        id: data.id,
+        opportunityId:
+          data.opportunityId,
+        status: data.status,
+        appliedDate:
+          data.appliedDate || null,
+        notes: data.notes || "",
+        followUpDate:
+          data.followUpDate || null
+      };
+
+      setApplications((previousApplications) =>
+        previousApplications.map(
+          (currentApplication) =>
+            currentApplication.id ===
+            formattedApplication.id
+              ? formattedApplication
+              : currentApplication
+        )
+      );
+    } catch (error) {
+      console.error(
+        "Error updating application:",
+        error
+      );
+    }
+  };
+
+  // Change application status
+  const handleApplicationStatusChange = async (
     opportunityId,
     newStatus
   ) => {
-    setApplications(
-      applications.map((application) => {
-        if (application.opportunityId !== opportunityId) {
-          return application;
-        }
+    const application = applications.find(
+      (item) =>
+        item.opportunityId === opportunityId
+    );
 
-        const updatedApplication = {
-          ...application,
-          status: newStatus
-        };
+    if (!application) {
+      return;
+    }
 
-        if (
-          newStatus === "Applied" &&
-          application.appliedDate === null
-        ) {
-          const today = new Date();
+    let appliedDate =
+      application.appliedDate;
 
-          const todayString =
-            today.getFullYear() +
-            "-" +
-            String(today.getMonth() + 1).padStart(2, "0") +
-            "-" +
-            String(today.getDate()).padStart(2, "0");
+    if (
+      newStatus === "Applied" &&
+      !application.appliedDate
+    ) {
+      const today = new Date();
 
-          updatedApplication.appliedDate = todayString;
-        }
+      appliedDate =
+        today.getFullYear() +
+        "-" +
+        String(
+          today.getMonth() + 1
+        ).padStart(2, "0") +
+        "-" +
+        String(
+          today.getDate()
+        ).padStart(2, "0");
+    }
 
-        return updatedApplication;
-      })
+    await updateApplication(
+      application,
+      {
+        status: newStatus,
+        appliedDate
+      }
     );
   };
 
-  const handleApplicationUpdate = (
+  // Update application details
+  const handleApplicationUpdate = async (
     opportunityId,
     field,
     value
   ) => {
-    setApplications(
-      applications.map((application) =>
-        application.opportunityId === opportunityId
-          ? {
-              ...application,
-              [field]: value
-            }
-          : application
-      )
+    const application = applications.find(
+      (item) =>
+        item.opportunityId === opportunityId
+    );
+
+    if (!application) {
+      return;
+    }
+
+    await updateApplication(
+      application,
+      {
+        [field]: value
+      }
     );
   };
 
-  const handleStopTracking = (opportunityId) => {
-    setApplications(
-      applications.filter(
-        (application) =>
-          application.opportunityId !== opportunityId
-      )
+  // Stop tracking application
+  const handleStopTracking = async (
+    opportunityId
+  ) => {
+    const application = applications.find(
+      (item) =>
+        item.opportunityId === opportunityId
     );
+
+    if (!application) {
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${API_URL}/applications/${application.id}`,
+        {
+          method: "DELETE"
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.error ||
+            "Failed to delete application"
+        );
+      }
+
+      setApplications((previousApplications) =>
+        previousApplications.filter(
+          (currentApplication) =>
+            currentApplication.id !==
+            application.id
+        )
+      );
+    } catch (error) {
+      console.error(
+        "Error deleting application:",
+        error
+      );
+    }
+  };
+
+  // Save an opportunity
+  const handleSaveOpportunity = async (
+    opportunity
+  ) => {
+    const alreadySaved = savedOpportunities.some(
+      (saved) =>
+        saved.id === opportunity.id
+    );
+
+    if (alreadySaved) {
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${API_URL}/saved-opportunities`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            opportunityId: opportunity.id
+          })
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.error ||
+            "Failed to save opportunity"
+        );
+      }
+
+      setSavedOpportunities(
+        (previousSavedOpportunities) => [
+          ...previousSavedOpportunities,
+          opportunity
+        ]
+      );
+    } catch (error) {
+      console.error(
+        "Error saving opportunity:",
+        error
+      );
+    }
+  };
+
+  // Remove a saved opportunity
+  const handleRemoveSavedOpportunity = async (
+    opportunity
+  ) => {
+    try {
+      const response = await fetch(
+        `${API_URL}/saved-opportunities/${opportunity.id}`,
+        {
+          method: "DELETE"
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.error ||
+            "Failed to remove saved opportunity"
+        );
+      }
+
+      setSavedOpportunities(
+        (previousSavedOpportunities) =>
+          previousSavedOpportunities.filter(
+            (saved) =>
+              saved.id !== opportunity.id
+          )
+      );
+    } catch (error) {
+      console.error(
+        "Error removing saved opportunity:",
+        error
+      );
+    }
+  };
+
+  // Save or unsave an opportunity
+  const handleSaveToggle = async (
+    opportunity
+  ) => {
+    const alreadySaved = savedOpportunities.some(
+      (saved) =>
+        saved.id === opportunity.id
+    );
+
+    if (alreadySaved) {
+      await handleRemoveSavedOpportunity(
+        opportunity
+      );
+    } else {
+      await handleSaveOpportunity(
+        opportunity
+      );
+    }
   };
 
   return (
@@ -134,30 +446,48 @@ function App() {
 
       {currentView === "discover" && (
         <HomePage
-          savedOpportunities={savedOpportunities}
-          setSavedOpportunities={setSavedOpportunities}
-          selectedOpportunity={selectedOpportunity}
-          setSelectedOpportunity={setSelectedOpportunity}
+          savedOpportunities={
+            savedOpportunities
+          }
+          selectedOpportunity={
+            selectedOpportunity
+          }
+          setSelectedOpportunity={
+            setSelectedOpportunity
+          }
+          onSaveOpportunity={
+            handleSaveToggle
+          }
         />
       )}
 
       {currentView === "saved" && (
         <SavedOpportunities
-          savedOpportunities={savedOpportunities}
+          savedOpportunities={
+            savedOpportunities
+          }
           applications={applications}
           onView={handleViewOpportunity}
-          onTrackApplication={handleTrackApplication}
+          onTrackApplication={
+            handleTrackApplication
+          }
           onApplicationStatusChange={
             handleApplicationStatusChange
           }
-          onApplicationUpdate={handleApplicationUpdate}
-          onStopTracking={handleStopTracking}
+          onApplicationUpdate={
+            handleApplicationUpdate
+          }
+          onStopTracking={
+            handleStopTracking
+          }
         />
       )}
 
       {currentView === "dashboard" && (
         <Dashboard
-          savedOpportunities={savedOpportunities}
+          savedOpportunities={
+            savedOpportunities
+          }
           applications={applications}
         />
       )}

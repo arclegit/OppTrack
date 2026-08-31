@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import OpportunityCard from "./OpportunityCard";
 import applicationStatuses from "../data/applicationStatuses";
 
@@ -10,6 +11,55 @@ function SavedOpportunities({
   onApplicationUpdate,
   onStopTracking
 }) {
+  const [notes, setNotes] = useState({});
+
+  // Keep local note values synchronized with application data
+  useEffect(() => {
+    const noteValues = {};
+
+    applications.forEach((application) => {
+      noteValues[application.opportunityId] =
+        application.notes || "";
+    });
+
+    setNotes(noteValues);
+  }, [applications]);
+
+  const handleNotesChange = (
+    opportunityId,
+    value
+  ) => {
+    setNotes((previousNotes) => ({
+      ...previousNotes,
+      [opportunityId]: value
+    }));
+  };
+
+  const handleNotesBlur = (opportunityId) => {
+    const application = applications.find(
+      (item) =>
+        item.opportunityId === opportunityId
+    );
+
+    if (!application) {
+      return;
+    }
+
+    const currentNotes =
+      notes[opportunityId] || "";
+
+    // Only send the update if the note actually changed
+    if (currentNotes === (application.notes || "")) {
+      return;
+    }
+
+    onApplicationUpdate(
+      opportunityId,
+      "notes",
+      currentNotes
+    );
+  };
+
   return (
     <section className="saved-opportunities">
       <h1>Saved Opportunities</h1>
@@ -19,7 +69,8 @@ function SavedOpportunities({
           {savedOpportunities.map((opportunity) => {
             const application = applications.find(
               (item) =>
-                item.opportunityId === opportunity.id
+                item.opportunityId ===
+                opportunity.id
             );
 
             return (
@@ -51,14 +102,16 @@ function SavedOpportunities({
                           )
                         }
                       >
-                        {applicationStatuses.map((status) => (
-                          <option
-                            key={status}
-                            value={status}
-                          >
-                            {status}
-                          </option>
-                        ))}
+                        {applicationStatuses.map(
+                          (status) => (
+                            <option
+                              key={status}
+                              value={status}
+                            >
+                              {status}
+                            </option>
+                          )
+                        )}
                       </select>
                     </div>
 
@@ -73,12 +126,16 @@ function SavedOpportunities({
                         <input
                           id={`applied-date-${opportunity.id}`}
                           type="date"
-                          value={application.appliedDate || ""}
+                          value={
+                            application.appliedDate ||
+                            ""
+                          }
                           onChange={(event) =>
                             onApplicationUpdate(
                               opportunity.id,
                               "appliedDate",
-                              event.target.value || null
+                              event.target.value ||
+                                null
                             )
                           }
                         />
@@ -94,12 +151,16 @@ function SavedOpportunities({
                         <input
                           id={`follow-up-date-${opportunity.id}`}
                           type="date"
-                          value={application.followUpDate || ""}
+                          value={
+                            application.followUpDate ||
+                            ""
+                          }
                           onChange={(event) =>
                             onApplicationUpdate(
                               opportunity.id,
                               "followUpDate",
-                              event.target.value || null
+                              event.target.value ||
+                                null
                             )
                           }
                         />
@@ -115,14 +176,20 @@ function SavedOpportunities({
 
                       <textarea
                         id={`notes-${opportunity.id}`}
-                        value={application.notes}
+                        value={
+                          notes[opportunity.id] || ""
+                        }
                         placeholder="Add personal notes about this application..."
                         rows="4"
                         onChange={(event) =>
-                          onApplicationUpdate(
+                          handleNotesChange(
                             opportunity.id,
-                            "notes",
                             event.target.value
+                          )
+                        }
+                        onBlur={() =>
+                          handleNotesBlur(
+                            opportunity.id
                           )
                         }
                       />
@@ -132,7 +199,9 @@ function SavedOpportunities({
                       type="button"
                       className="stop-tracking-button"
                       onClick={() =>
-                        onStopTracking(opportunity.id)
+                        onStopTracking(
+                          opportunity.id
+                        )
                       }
                     >
                       Stop Tracking
@@ -143,7 +212,9 @@ function SavedOpportunities({
                     type="button"
                     className="track-application-button"
                     onClick={() =>
-                      onTrackApplication(opportunity)
+                      onTrackApplication(
+                        opportunity
+                      )
                     }
                   >
                     Track Application
@@ -154,7 +225,9 @@ function SavedOpportunities({
           })}
         </div>
       ) : (
-        <p>You haven't saved any opportunities yet.</p>
+        <p>
+          You haven't saved any opportunities yet.
+        </p>
       )}
     </section>
   );
