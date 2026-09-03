@@ -1,5 +1,6 @@
 import express from "express";
 import pool from "../db.js";
+import { requireAuth } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -12,9 +13,8 @@ const validStatuses = [
   "Rejected"
 ];
 
-// Temporary user ID
-// Authentication will replace this later.
-const USER_ID = 1;
+// All application routes require authentication.
+router.use(requireAuth);
 
 
 // GET /api/applications
@@ -38,7 +38,7 @@ router.get("/", async (req, res) => {
       WHERE applications.user_id = $1
       ORDER BY applications.id
       `,
-      [USER_ID]
+      [req.user.id]
     );
 
     res.json(result.rows);
@@ -106,7 +106,7 @@ router.post("/", async (req, res) => {
         WHERE user_id = $1
           AND opportunity_id = $2
         `,
-        [USER_ID, opportunityId]
+        [req.user.id, opportunityId]
       );
 
     if (
@@ -141,7 +141,7 @@ router.post("/", async (req, res) => {
         follow_up_date::text AS "followUpDate"
       `,
       [
-        USER_ID,
+        req.user.id,
         opportunityId,
         status,
         appliedDate || null,
@@ -196,7 +196,7 @@ router.patch("/:id", async (req, res) => {
         WHERE id = $1
           AND user_id = $2
         `,
-        [id, USER_ID]
+        [id, req.user.id]
       );
 
     if (
@@ -232,7 +232,7 @@ router.patch("/:id", async (req, res) => {
         notes || null,
         followUpDate || null,
         id,
-        USER_ID
+        req.user.id
       ]
     );
 
@@ -271,7 +271,7 @@ router.delete("/:id", async (req, res) => {
         notes,
         follow_up_date::text AS "followUpDate"
       `,
-      [id, USER_ID]
+      [id, req.user.id]
     );
 
     if (result.rows.length === 0) {
