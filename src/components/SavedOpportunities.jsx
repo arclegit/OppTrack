@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import OpportunityCard from "./OpportunityCard";
 import applicationStatuses from "../data/applicationStatuses";
 
@@ -12,18 +12,6 @@ function SavedOpportunities({
   onStopTracking
 }) {
   const [notes, setNotes] = useState({});
-
-  // Keep local note values synchronized with application data
-  useEffect(() => {
-    const noteValues = {};
-
-    applications.forEach((application) => {
-      noteValues[application.opportunityId] =
-        application.notes || "";
-    });
-
-    setNotes(noteValues);
-  }, [applications]);
 
   const handleNotesChange = (
     opportunityId,
@@ -46,7 +34,9 @@ function SavedOpportunities({
     }
 
     const currentNotes =
-      notes[opportunityId] || "";
+      notes[opportunityId] ??
+      application.notes ??
+      "";
 
     // Only send the update if the note actually changed
     if (currentNotes === (application.notes || "")) {
@@ -177,7 +167,9 @@ function SavedOpportunities({
                       <textarea
                         id={`notes-${opportunity.id}`}
                         value={
-                          notes[opportunity.id] || ""
+                          notes[opportunity.id] ??
+                          application.notes ??
+                          ""
                         }
                         placeholder="Add personal notes about this application..."
                         rows="4"

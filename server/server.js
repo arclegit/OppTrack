@@ -1,3 +1,5 @@
+import "dotenv/config";
+
 import express from "express";
 import cors from "cors";
 
@@ -11,13 +13,20 @@ import authRoutes from "./routes/authRoutes.js";
 
 const app = express();
 
-const PORT = 5000;
+
+// Hosting platforms provide PORT automatically.
+// 5000 is used when running locally.
+const PORT = process.env.PORT || 5000;
 
 
-// Allow requests from the React frontend
+// Frontend URL for CORS
+const FRONTEND_URL =
+  process.env.FRONTEND_URL || "http://localhost:5173";
+
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: FRONTEND_URL,
     credentials: true
   })
 );
@@ -27,7 +36,10 @@ app.use(
 app.use(express.json());
 
 
+// ==================================================
 // Health check
+// ==================================================
+
 app.get("/api/health", (req, res) => {
   res.json({
     message: "OppTrack API is running"
@@ -35,7 +47,10 @@ app.get("/api/health", (req, res) => {
 });
 
 
+// ==================================================
 // Database connection test
+// ==================================================
+
 app.get("/api/db-test", async (req, res) => {
   try {
     const result = await pool.query(
@@ -62,7 +77,10 @@ app.get("/api/db-test", async (req, res) => {
 });
 
 
+// ==================================================
 // API routes
+// ==================================================
+
 app.use(
   "/api/opportunities",
   opportunityRoutes
@@ -84,9 +102,12 @@ app.use(
 );
 
 
+// ==================================================
 // Start server
+// ==================================================
+
 app.listen(PORT, () => {
   console.log(
-    `OppTrack API running on http://localhost:${PORT}`
+    `OppTrack API running on port ${PORT}`
   );
 });
