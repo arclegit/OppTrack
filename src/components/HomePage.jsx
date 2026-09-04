@@ -4,6 +4,7 @@ import OpportunityCard from "./OpportunityCard";
 import OpportunityDetails from "./OpportunityDetails";
 import categories from "../data/categories";
 import scopes from "../data/scopes";
+import API_URL from "../config/api";
 
 function HomePage({
   savedOpportunities,
@@ -31,9 +32,10 @@ function HomePage({
 
   // Load opportunities from PostgreSQL
   useEffect(() => {
-    fetch(
-      "http://localhost:5000/api/opportunities"
-    )
+    
+     fetch(
+  `${API_URL}/opportunities`
+)
       .then((response) => {
         if (!response.ok) {
           throw new Error(

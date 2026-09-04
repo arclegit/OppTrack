@@ -6,10 +6,7 @@ import SavedOpportunities from "./components/SavedOpportunities";
 import Dashboard from "./components/Dashboard";
 import Login from "./components/Login";
 import Register from "./components/Register";
-
-
-const API_URL =
-  "http://localhost:5000/api";
+import API_URL from "./config/api";
 
 
 function App() {
