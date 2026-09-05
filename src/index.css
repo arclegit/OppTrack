@@ -2,8 +2,6 @@
   font-family: Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  color: #1f2937;
-  background: #f5f7fa;
 }
 
 * {
@@ -14,6 +12,16 @@ body {
   margin: 0;
   background: #f5f7fa;
   color: #1f2937;
+}
+
+
+/* =========================
+   Global Layout
+   ========================= */
+
+main {
+  width: min(1180px, calc(100% - 64px));
+  margin: 0 auto;
 }
 
 
@@ -30,7 +38,6 @@ body {
   background: rgba(255, 255, 255, 0.96);
   border-bottom: 1px solid #e5e7eb;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-  box-sizing: border-box;
 }
 
 
@@ -50,9 +57,6 @@ body {
   cursor: pointer;
 }
 
-
-/* Logo Mark */
-
 .navbar-logo-mark {
   display: flex;
   align-items: center;
@@ -65,11 +69,7 @@ body {
   font-size: 15px;
   font-weight: 700;
   line-height: 1;
-  box-sizing: border-box;
 }
-
-
-/* Logo Text */
 
 .navbar-logo-text {
   font-size: 24px;
@@ -86,15 +86,8 @@ body {
   color: #2563eb;
 }
 
-
-/* Logo Hover */
-
 .navbar-logo:hover .navbar-logo-mark {
   border-color: #1d4ed8;
-}
-
-.navbar-logo:hover .navbar-logo-opp {
-  color: #111827;
 }
 
 .navbar-logo:hover .navbar-logo-track {
@@ -111,9 +104,6 @@ body {
   align-items: center;
   gap: 4px;
 }
-
-
-/* Navigation buttons */
 
 .navbar-links button {
   padding: 9px 13px;
@@ -134,9 +124,6 @@ body {
   color: #1d4ed8;
 }
 
-
-/* Logged-in user */
-
 .navbar-user {
   margin-left: 8px;
   padding: 7px 12px;
@@ -145,9 +132,6 @@ body {
   font-size: 14px;
   font-weight: 600;
 }
-
-
-/* Logout */
 
 .navbar-logout {
   margin-left: 4px;
@@ -165,13 +149,12 @@ body {
    ========================= */
 
 .home-page {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 48px 32px 64px;
+  padding-top: 48px;
+  padding-bottom: 56px;
 }
 
 .home-page h1 {
+  margin-top: 0;
   margin-bottom: 8px;
 }
 
@@ -184,7 +167,7 @@ body {
   display: flex;
   gap: 12px;
   margin-top: 24px;
-  max-width: 650px;
+  max-width: 760px;
 }
 
 .search-bar input {
@@ -193,8 +176,8 @@ body {
   padding: 12px;
   border: 1px solid #d1d5db;
   border-radius: 6px;
+  background: white;
   font-size: 16px;
-  box-sizing: border-box;
 }
 
 .search-bar input:focus {
@@ -223,7 +206,7 @@ body {
 
 .filters-section {
   margin-top: 28px;
-  max-width: 650px;
+  max-width: 760px;
 }
 
 .filters-section h2 {
@@ -233,7 +216,7 @@ body {
 
 .filters-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 16px;
 }
 
@@ -257,7 +240,6 @@ body {
   background: white;
   color: #1f2937;
   font-size: 15px;
-  box-sizing: border-box;
 }
 
 .filter-control select {
@@ -270,9 +252,6 @@ body {
   border-color: #2563eb;
 }
 
-
-/* Clear Filters Button */
-
 .clear-filters-button {
   margin-top: 16px;
   padding: 10px 16px;
@@ -283,9 +262,6 @@ body {
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease;
 }
 
 .clear-filters-button:hover {
@@ -293,17 +269,11 @@ body {
   border-color: #9ca3af;
 }
 
-
-/* Filter Status */
-
 .filter-status {
   margin-top: 14px;
   font-size: 14px;
   color: #6b7280;
 }
-
-
-/* Result Count */
 
 .result-count {
   margin-top: 24px;
@@ -333,13 +303,11 @@ body {
 .opportunity-card {
   display: flex;
   flex-direction: column;
-  margin-top: 0;
-  padding: 24px;
   min-height: 280px;
+  padding: 24px;
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 10px;
-  box-sizing: border-box;
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
@@ -349,9 +317,6 @@ body {
   transform: translateY(-3px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
-
-
-/* Card Header */
 
 .opportunity-card-header {
   margin-bottom: 12px;
@@ -367,9 +332,6 @@ body {
   font-weight: 600;
 }
 
-
-/* Card Title */
-
 .opportunity-card h2 {
   margin-top: 0;
   margin-bottom: 8px;
@@ -377,30 +339,18 @@ body {
   line-height: 1.3;
 }
 
-
-/* Organization */
-
 .opportunity-organization {
   margin: 0 0 14px;
   font-weight: 600;
 }
 
-
-/* Description */
-
 .opportunity-description {
   margin: 0 0 10px;
 }
 
-
-/* Eligibility */
-
 .opportunity-eligibility {
   margin: 0 0 16px;
 }
-
-
-/* Metadata */
 
 .opportunity-meta {
   margin-top: auto;
@@ -414,9 +364,6 @@ body {
   font-weight: 600;
 }
 
-
-/* Card Button */
-
 .opportunity-card button {
   align-self: flex-start;
   margin-top: 16px;
@@ -427,7 +374,6 @@ body {
   color: white;
   cursor: pointer;
   font-size: 14px;
-  transition: background 0.2s ease;
 }
 
 .opportunity-card button:hover {
@@ -436,12 +382,12 @@ body {
 
 
 /* =========================
-   Opportunity Details Page
+   Opportunity Details
    ========================= */
 
 .opportunity-details-page {
-  width: 100%;
-  padding: 0;
+  padding-top: 48px;
+  padding-bottom: 56px;
 }
 
 .opportunity-details {
@@ -451,11 +397,7 @@ body {
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 12px;
-  box-sizing: border-box;
 }
-
-
-/* Details Header */
 
 .opportunity-details-header {
   padding-bottom: 24px;
@@ -475,12 +417,9 @@ body {
   font-weight: 600;
 }
 
-
-/* Details Metadata */
-
 .opportunity-details-meta {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 20px;
   margin-top: 24px;
   margin-bottom: 32px;
@@ -512,9 +451,6 @@ body {
   color: #b45309;
 }
 
-
-/* Details Sections */
-
 .opportunity-details-section {
   margin-top: 28px;
 }
@@ -528,9 +464,6 @@ body {
   margin: 0;
   line-height: 1.7;
 }
-
-
-/* Details Actions */
 
 .opportunity-details-actions {
   display: flex;
@@ -548,9 +481,6 @@ body {
   cursor: pointer;
 }
 
-
-/* Save Button */
-
 .save-button {
   background: #2563eb;
   color: white;
@@ -559,9 +489,6 @@ body {
 .save-button:hover {
   background: #1d4ed8;
 }
-
-
-/* Back Button */
 
 .back-button {
   background: #e5e7eb;
@@ -597,7 +524,6 @@ body {
 .track-application-button:hover {
   background: #1d4ed8;
 }
-
 
 .application-tracked-button {
   align-self: flex-start;
@@ -659,7 +585,7 @@ body {
 
 .application-details {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 16px;
   margin-top: 16px;
 }
@@ -685,7 +611,6 @@ body {
   background: white;
   color: #1f2937;
   font-size: 14px;
-  box-sizing: border-box;
 }
 
 .application-date-field input:focus,
@@ -705,9 +630,6 @@ body {
   font-family: inherit;
   line-height: 1.5;
 }
-
-
-/* Stop Tracking */
 
 .stop-tracking-button {
   align-self: flex-start;
@@ -731,54 +653,55 @@ body {
    ========================= */
 
 .dashboard {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 48px 32px 64px;
+  padding-top: 48px;
+  padding-bottom: 56px;
 }
 
 .dashboard > h1 {
-  margin: 0 0 8px;
-  font-size: 32px;
-  line-height: 1.2;
+  margin-top: 0;
+  margin-bottom: 8px;
 }
 
 .dashboard > p {
-  margin: 0;
+  margin-top: 0;
   color: #6b7280;
 }
 
 .dashboard-section {
-  margin-top: 40px;
+  margin-top: 32px;
+  padding: 24px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
 }
 
 .dashboard-section h2 {
-  margin: 0 0 8px;
-  font-size: 22px;
-  line-height: 1.3;
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 20px;
 }
 
 .dashboard-section > p {
-  margin: 0;
-  color: #6b7280;
+  margin-top: 0;
 }
 
 .dashboard-opportunity {
+  padding: 16px 0;
+  border-top: 1px solid #e5e7eb;
+}
+
+.dashboard-opportunity:first-of-type {
   margin-top: 16px;
-  padding: 20px;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
 }
 
 .dashboard-opportunity h3 {
   margin: 0 0 6px;
-  font-size: 18px;
+  font-size: 17px;
 }
 
 .dashboard-opportunity p {
   margin: 4px 0;
-  color: #4b5563;
+  color: #6b7280;
 }
 
 
@@ -796,26 +719,21 @@ body {
 .application-summary-item {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  min-height: 120px;
+  gap: 6px;
+  min-width: 0;
   padding: 20px;
-  background: white;
+  background: #f9fafb;
   border: 1px solid #e5e7eb;
   border-radius: 10px;
 }
 
 .application-summary-item span {
   font-size: 14px;
-  font-weight: 600;
   color: #6b7280;
 }
 
 .application-summary-item strong {
-  margin-top: 12px;
-  font-size: 30px;
-  line-height: 1;
-  font-weight: 700;
-  color: #111827;
+  font-size: 24px;
 }
 
 
@@ -823,7 +741,26 @@ body {
    Responsive Layout
    ========================= */
 
+@media (max-width: 900px) {
+  main {
+    width: min(100% - 40px, 760px);
+  }
+
+  .navbar {
+    padding: 16px 20px;
+  }
+
+  .opportunity-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+
 @media (max-width: 768px) {
+
+  main {
+    width: calc(100% - 32px);
+  }
 
   /* Navbar */
 
@@ -831,7 +768,7 @@ body {
     flex-direction: column;
     align-items: stretch;
     gap: 12px;
-    padding: 14px 20px;
+    padding: 14px 16px;
   }
 
   .navbar-logo {
@@ -869,7 +806,8 @@ body {
   /* Home */
 
   .home-page {
-    padding: 32px 20px 48px;
+    padding-top: 32px;
+    padding-bottom: 40px;
   }
 
 
@@ -900,17 +838,11 @@ body {
   }
 
 
-  /* Opportunity List */
-
-  .opportunity-list {
-    grid-template-columns: 1fr;
-  }
-
-
   /* Details */
 
   .opportunity-details-page {
-    padding: 0;
+    padding-top: 32px;
+    padding-bottom: 40px;
   }
 
   .opportunity-details {
@@ -944,51 +876,38 @@ body {
   /* Dashboard */
 
   .dashboard {
-    padding: 32px 20px 48px;
-  }
-
-  .dashboard > h1 {
-    font-size: 28px;
+    padding-top: 32px;
+    padding-bottom: 40px;
   }
 
   .dashboard-section {
-    margin-top: 32px;
+    padding: 20px;
   }
 
 
   /* Application Summary */
 
   .application-summary {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-  }
-
-  .application-summary-item {
-    min-height: 110px;
-    padding: 16px;
+    grid-template-columns: 1fr 1fr;
   }
 }
 
 
-/* =========================
-   Small Mobile
-   ========================= */
-
 @media (max-width: 480px) {
 
-  .home-page {
-    padding: 28px 16px 48px;
-  }
-
-  .dashboard {
-    padding: 28px 16px 48px;
+  main {
+    width: calc(100% - 24px);
   }
 
   .application-summary {
     grid-template-columns: 1fr;
   }
 
-  .application-summary-item {
-    min-height: 100px;
+  .dashboard-section {
+    padding: 16px;
+  }
+
+  .opportunity-details {
+    padding: 20px;
   }
 }
