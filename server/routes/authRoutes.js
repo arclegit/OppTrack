@@ -315,9 +315,9 @@ router.post("/login", async (req, res) => {
     // ------------------------------
 
     res.setHeader(
-      "Set-Cookie",
-      `opptrack_session=${sessionToken}; Path=/; HttpOnly; SameSite=Lax; Expires=${expiresAt.toUTCString()}`
-    );
+  "Set-Cookie",
+  `opptrack_session=${sessionToken}; Path=/; HttpOnly; Secure; SameSite=None; Expires=${expiresAt.toUTCString()}`
+);
 
 
     // ------------------------------
@@ -470,9 +470,9 @@ router.post(
       // ------------------------------
 
       res.setHeader(
-        "Set-Cookie",
-        "opptrack_session=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0"
-      );
+  "Set-Cookie",
+  "opptrack_session=; Path=/; HttpOnly; Secure; SameSite=None; Max-Age=0"
+);
 
 
       res.json({
