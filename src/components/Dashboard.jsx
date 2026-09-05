@@ -65,6 +65,7 @@ function Dashboard({ savedOpportunities, applications }) {
             <div className="application-summary">
               <div className="application-summary-item">
                 <span>Interested</span>
+
                 <strong>
                   {getApplicationCount("Interested")}
                 </strong>
@@ -72,6 +73,7 @@ function Dashboard({ savedOpportunities, applications }) {
 
               <div className="application-summary-item">
                 <span>Applied</span>
+
                 <strong>
                   {getApplicationCount("Applied")}
                 </strong>
@@ -79,6 +81,7 @@ function Dashboard({ savedOpportunities, applications }) {
 
               <div className="application-summary-item">
                 <span>Shortlisted</span>
+
                 <strong>
                   {getApplicationCount("Shortlisted")}
                 </strong>
@@ -86,6 +89,7 @@ function Dashboard({ savedOpportunities, applications }) {
 
               <div className="application-summary-item">
                 <span>Interview</span>
+
                 <strong>
                   {getApplicationCount("Interview")}
                 </strong>
@@ -93,6 +97,7 @@ function Dashboard({ savedOpportunities, applications }) {
 
               <div className="application-summary-item">
                 <span>Selected</span>
+
                 <strong>
                   {getApplicationCount("Selected")}
                 </strong>
@@ -100,6 +105,7 @@ function Dashboard({ savedOpportunities, applications }) {
 
               <div className="application-summary-item">
                 <span>Rejected</span>
+
                 <strong>
                   {getApplicationCount("Rejected")}
                 </strong>
@@ -111,14 +117,6 @@ function Dashboard({ savedOpportunities, applications }) {
             You are not tracking any applications yet.
           </p>
         )}
-      </section>
-
-      <section className="dashboard-section">
-        <h2>Follow-ups</h2>
-
-        <p>
-          Follow-up tracking will be available in a later step.
-        </p>
       </section>
     </main>
   );
