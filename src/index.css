@@ -19,29 +19,53 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 32px;
-  background: white;
+  gap: 24px;
+  padding: 16px 40px;
+  background: rgba(255, 255, 255, 0.96);
   border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  box-sizing: border-box;
 }
+
+
+/* Logo */
 
 .navbar-logo {
   margin: 0;
-  font-size: 22px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #111827;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  cursor: pointer;
 }
+
+.navbar-logo:hover {
+  color: #2563eb;
+}
+
+
+/* Navigation */
 
 .navbar-links {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
 }
 
+
+/* Navigation buttons */
+
 .navbar-links button {
-  padding: 8px 14px;
+  padding: 9px 13px;
   border: none;
-  border-radius: 6px;
+  border-radius: 7px;
   background: transparent;
-  color: #1f2937;
-  font-size: 15px;
+  color: #4b5563;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
   transition:
     background 0.2s ease,
@@ -51,6 +75,31 @@ body {
 .navbar-links button:hover {
   background: #eff6ff;
   color: #1d4ed8;
+}
+
+
+/* Logged-in user */
+
+.navbar-user {
+  margin-left: 8px;
+  padding: 7px 12px;
+  border-left: 1px solid #e5e7eb;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+
+/* Logout */
+
+.navbar-logout {
+  margin-left: 4px;
+  color: #dc2626 !important;
+}
+
+.navbar-logout:hover {
+  background: #fef2f2 !important;
+  color: #b91c1c !important;
 }
 
 
@@ -182,6 +231,26 @@ body {
 .clear-filters-button:hover {
   background: #f9fafb;
   border-color: #9ca3af;
+}
+
+
+/* Filter Status */
+
+.filter-status {
+  margin-top: 14px;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+
+/* Result Count */
+
+.result-count {
+  margin-top: 24px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
 }
 
 
@@ -444,6 +513,191 @@ body {
 
 
 /* =========================
+   Saved Opportunities
+   ========================= */
+
+.saved-opportunity-item {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.track-application-button {
+  align-self: flex-start;
+  margin-top: 12px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  background: #2563eb;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.track-application-button:hover {
+  background: #1d4ed8;
+}
+
+
+.application-tracked-button {
+  align-self: flex-start;
+  margin-top: 12px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  background: #e5e7eb;
+  color: #374151;
+  font-size: 14px;
+  cursor: default;
+}
+
+
+/* =========================
+   Application Status
+   ========================= */
+
+.application-status {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 12px;
+  max-width: 220px;
+}
+
+.application-status label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.application-status select {
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  color: #1f2937;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.application-status select:focus {
+  outline: 2px solid #bfdbfe;
+  border-color: #2563eb;
+}
+
+
+/* =========================
+   Application Tracking
+   ========================= */
+
+.application-tracking {
+  margin-top: 16px;
+  padding: 20px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.application-details {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.application-date-field,
+.application-notes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.application-date-field label,
+.application-notes label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.application-date-field input,
+.application-notes textarea {
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  color: #1f2937;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.application-date-field input:focus,
+.application-notes textarea:focus {
+  outline: 2px solid #bfdbfe;
+  border-color: #2563eb;
+}
+
+.application-notes {
+  margin-top: 16px;
+}
+
+.application-notes textarea {
+  width: 100%;
+  min-height: 100px;
+  resize: vertical;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+
+/* Stop Tracking */
+
+.stop-tracking-button {
+  align-self: flex-start;
+  margin-top: 16px;
+  padding: 10px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  color: #374151;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.stop-tracking-button:hover {
+  background: #f3f4f6;
+}
+
+
+/* =========================
+   Application Summary
+   ========================= */
+
+.application-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.application-summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.application-summary-item span {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.application-summary-item strong {
+  font-size: 24px;
+}
+
+
+/* =========================
    Responsive Layout
    ========================= */
 
@@ -452,16 +706,32 @@ body {
   /* Navbar */
 
   .navbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
     padding: 14px 20px;
   }
 
+  .navbar-logo {
+    align-self: flex-start;
+    font-size: 22px;
+  }
+
   .navbar-links {
-    gap: 2px;
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 4px;
   }
 
   .navbar-links button {
-    padding: 8px 9px;
+    padding: 8px 10px;
     font-size: 14px;
+  }
+
+  .navbar-user {
+    margin-left: 4px;
+    padding-left: 10px;
   }
 
 
@@ -531,197 +801,18 @@ body {
   .opportunity-details-actions button {
     width: 100%;
   }
-}
-.filter-status {
-  margin-top: 14px;
-  font-size: 14px;
-  color: #6b7280;
-}
-.result-count {
-  margin-top: 24px;
-  margin-bottom: 0;
-  font-size: 14px;
-  font-weight: 600;
-  color: #6b7280;
-}
-/* =========================
-   Saved Opportunities
-   ========================= */
 
-.saved-opportunity-item {
-  display: flex;
-  flex-direction: column;
-}
 
-.track-application-button {
-  align-self: flex-start;
-  margin-top: 12px;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 6px;
-  background: #2563eb;
-  color: white;
-  cursor: pointer;
-  font-size: 14px;
-}
+  /* Application Details */
 
-.track-application-button:hover {
-  background: #1d4ed8;
-}
-
-.application-tracked-button {
-  align-self: flex-start;
-  margin-top: 12px;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 6px;
-  background: #e5e7eb;
-  color: #374151;
-  font-size: 14px;
-  cursor: default;
-}
-/* =========================
-   Application Status
-   ========================= */
-
-.application-status {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-top: 12px;
-  max-width: 220px;
-}
-
-.application-status label {
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.application-status select {
-  padding: 10px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  background: white;
-  color: #1f2937;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.application-status select:focus {
-  outline: 2px solid #bfdbfe;
-  border-color: #2563eb;
-}
-/* =========================
-   Application Tracking
-   ========================= */
-
-.application-tracking {
-  margin-top: 16px;
-  padding: 20px;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-}
-
-.application-details {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  margin-top: 16px;
-}
-
-.application-date-field,
-.application-notes {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.application-date-field label,
-.application-notes label {
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.application-date-field input,
-.application-notes textarea {
-  padding: 10px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  background: white;
-  color: #1f2937;
-  font-size: 14px;
-  box-sizing: border-box;
-}
-
-.application-date-field input:focus,
-.application-notes textarea:focus {
-  outline: 2px solid #bfdbfe;
-  border-color: #2563eb;
-}
-
-.application-notes {
-  margin-top: 16px;
-}
-
-.application-notes textarea {
-  width: 100%;
-  min-height: 100px;
-  resize: vertical;
-  font-family: inherit;
-  line-height: 1.5;
-}
-@media (max-width: 768px) {
   .application-details {
     grid-template-columns: 1fr;
   }
-}
-/* =========================
-   Application Summary
-   ========================= */
 
-.application-summary {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-top: 20px;
-}
 
-.application-summary-item {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 16px;
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-}
+  /* Application Summary */
 
-.application-summary-item span {
-  font-size: 14px;
-  color: #6b7280;
-}
-
-.application-summary-item strong {
-  font-size: 24px;
-}
-@media (max-width: 768px) {
   .application-summary {
     grid-template-columns: 1fr 1fr;
   }
-}
-.stop-tracking-button {
-  align-self: flex-start;
-  margin-top: 16px;
-  padding: 10px 16px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  background: white;
-  color: #374151;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.stop-tracking-button:hover {
-  background: #f3f4f6;
 }

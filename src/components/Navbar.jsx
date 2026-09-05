@@ -3,22 +3,23 @@ function Navbar({
   currentUser,
   onLogout
 }) {
-
   return (
     <nav className="navbar">
 
-      <h2 className="navbar-logo">
+      <button
+        type="button"
+        className="navbar-logo"
+        onClick={() => onNavigate("discover")}
+      >
         OppTrack
-      </h2>
+      </button>
 
 
       <div className="navbar-links">
 
         <button
           type="button"
-          onClick={() =>
-            onNavigate("discover")
-          }
+          onClick={() => onNavigate("discover")}
         >
           Discover
         </button>
@@ -26,9 +27,7 @@ function Navbar({
 
         <button
           type="button"
-          onClick={() =>
-            onNavigate("saved")
-          }
+          onClick={() => onNavigate("saved")}
         >
           Saved
         </button>
@@ -36,27 +35,22 @@ function Navbar({
 
         <button
           type="button"
-          onClick={() =>
-            onNavigate("dashboard")
-          }
+          onClick={() => onNavigate("dashboard")}
         >
           Dashboard
         </button>
 
 
-        {/* Logged-in user name */}
-
         {currentUser && (
-          <span>
+          <span className="navbar-user">
             {currentUser.name}
           </span>
         )}
 
 
-        {/* Logout */}
-
         <button
           type="button"
+          className="navbar-logout"
           onClick={onLogout}
         >
           Logout
@@ -67,6 +61,5 @@ function Navbar({
     </nav>
   );
 }
-
 
 export default Navbar;
