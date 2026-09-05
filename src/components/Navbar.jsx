@@ -10,8 +10,16 @@ function Navbar({
         type="button"
         className="navbar-logo"
         onClick={() => onNavigate("discover")}
+        aria-label="OppTrack home"
       >
-        OppTrack
+        <span className="navbar-logo-mark">
+          O
+        </span>
+
+        <span className="navbar-logo-text">
+          <span className="navbar-logo-opp">Opp</span>
+          <span className="navbar-logo-track">Track</span>
+        </span>
       </button>
 
 

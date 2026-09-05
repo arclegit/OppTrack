@@ -28,26 +28,77 @@ body {
 }
 
 
-/* Logo */
+/* =========================
+   Navbar Logo
+   ========================= */
 
 .navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 9px;
   margin: 0;
   padding: 0;
   border: none;
   background: transparent;
   color: #111827;
-  font-size: 24px;
-  font-weight: 700;
-  letter-spacing: -0.03em;
   cursor: pointer;
 }
 
-.navbar-logo:hover {
+
+/* Logo Mark */
+
+.navbar-logo-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 2px solid #2563eb;
+  border-radius: 50%;
+  color: #111827;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  box-sizing: border-box;
+}
+
+
+/* Logo Text */
+
+.navbar-logo-text {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.navbar-logo-opp {
+  color: #111827;
+}
+
+.navbar-logo-track {
   color: #2563eb;
 }
 
 
-/* Navigation */
+/* Logo Hover */
+
+.navbar-logo:hover .navbar-logo-mark {
+  border-color: #1d4ed8;
+}
+
+.navbar-logo:hover .navbar-logo-opp {
+  color: #111827;
+}
+
+.navbar-logo:hover .navbar-logo-track {
+  color: #1d4ed8;
+}
+
+
+/* =========================
+   Navigation
+   ========================= */
 
 .navbar-links {
   display: flex;
@@ -714,6 +765,15 @@ body {
 
   .navbar-logo {
     align-self: flex-start;
+  }
+
+  .navbar-logo-mark {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+
+  .navbar-logo-text {
     font-size: 22px;
   }
 
