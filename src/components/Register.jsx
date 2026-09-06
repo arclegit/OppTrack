@@ -1,8 +1,17 @@
 import { useState } from "react";
 import API_URL from "../config/api";
 
-function Register({ onRegister, onShowLogin }) {
-  const [name, setName] = useState("");
+const EMAIL_PATTERN =
+  /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+const PASSWORD_MIN_LENGTH = 8;
+
+function Register({
+  onRegister,
+  onShowLogin
+}) {
+  const [name, setName] =
+    useState("");
 
   const [email, setEmail] =
     useState("");
@@ -16,85 +25,160 @@ function Register({ onRegister, onShowLogin }) {
   const [loading, setLoading] =
     useState(false);
 
+  const validateForm = () => {
+    const trimmedName =
+      name.trim();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+    const normalizedEmail =
+      email.trim().toLowerCase();
 
-    setError("");
-    setLoading(true);
-
-    try {
-      const response = await fetch(
-        `${API_URL}/auth/register`,
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
-
-          body: JSON.stringify({
-            name,
-            email,
-            password
-          })
-        }
-      );
-
-      const data =
-        await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data.error ||
-            "Failed to register"
-        );
-      }
-
-      // Registration succeeded.
-      onRegister(data.user);
-
-    } catch (error) {
-      console.error(
-        "Registration error:",
-        error
-      );
-
-      setError(
-        error.message ||
-          "Failed to register"
-      );
-    } finally {
-      setLoading(false);
+    if (!trimmedName) {
+      return "Please enter your name.";
     }
+
+    if (trimmedName.length < 2) {
+      return "Name must be at least 2 characters.";
+    }
+
+    if (trimmedName.length > 80) {
+      return "Name must be 80 characters or fewer.";
+    }
+
+    if (!normalizedEmail) {
+      return "Please enter your email address.";
+    }
+
+    if (!EMAIL_PATTERN.test(normalizedEmail)) {
+      return "Please enter a valid email address.";
+    }
+
+    if (!password) {
+      return "Please create a password.";
+    }
+
+    if (password.length < PASSWORD_MIN_LENGTH) {
+      return "Password must be at least 8 characters.";
+    }
+
+    if (!/[A-Za-z]/.test(password)) {
+      return "Password must contain at least one letter.";
+    }
+
+    if (!/[0-9]/.test(password)) {
+      return "Password must contain at least one number.";
+    }
+
+    return "";
   };
 
+  const handleSubmit =
+    async (event) => {
+      event.preventDefault();
+
+      setError("");
+
+      const validationError =
+        validateForm();
+
+      if (validationError) {
+        setError(validationError);
+        return;
+      }
+
+      setLoading(true);
+
+      try {
+        const response =
+          await fetch(
+            `${API_URL}/auth/register`,
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body: JSON.stringify({
+                name: name.trim(),
+                email:
+                  email
+                    .trim()
+                    .toLowerCase(),
+                password
+              })
+            }
+          );
+
+        let data = {};
+
+        try {
+          data =
+            await response.json();
+        } catch {
+          data = {};
+        }
+
+        if (!response.ok) {
+          throw new Error(
+            data.error ||
+              "We couldn't create your account. Please try again."
+          );
+        }
+
+        onRegister(data.user);
+
+      } catch (error) {
+        console.error(
+          "Registration error:",
+          error
+        );
+
+        if (
+          error instanceof
+          TypeError
+        ) {
+          setError(
+            "We couldn't connect to OppTrack. Please check your connection and try again."
+          );
+        } else {
+          setError(
+            error.message ||
+              "We couldn't create your account. Please try again."
+          );
+        }
+
+      } finally {
+        setLoading(false);
+      }
+    };
 
   return (
     <div className="auth-container">
 
       <div className="auth-card">
 
-        <h1>Create your OppTrack account</h1>
+        <h1>
+          Create your OppTrack account
+        </h1>
 
-        <p>
+        <p className="auth-description">
           Start tracking your opportunities.
         </p>
 
-
         <form
           onSubmit={handleSubmit}
+          noValidate
         >
 
           <div className="auth-field">
 
-            <label htmlFor="name">
+            <label htmlFor="register-name">
               Name
             </label>
 
             <input
-              id="name"
+              id="register-name"
               type="text"
               value={name}
               onChange={(event) =>
@@ -103,6 +187,8 @@ function Register({ onRegister, onShowLogin }) {
                 )
               }
               placeholder="Enter your name"
+              autoComplete="name"
+              maxLength={80}
               required
             />
 
@@ -124,7 +210,9 @@ function Register({ onRegister, onShowLogin }) {
                   event.target.value
                 )
               }
-              placeholder="Enter your email"
+              placeholder="you@example.com"
+              autoComplete="email"
+              maxLength={254}
               required
             />
 
@@ -147,14 +235,27 @@ function Register({ onRegister, onShowLogin }) {
                 )
               }
               placeholder="Create a password"
+              autoComplete="new-password"
+              minLength={
+                PASSWORD_MIN_LENGTH
+              }
               required
             />
+
+            <p className="auth-help">
+              Use at least 8 characters,
+              including one letter and
+              one number.
+            </p>
 
           </div>
 
 
           {error && (
-            <p className="auth-error">
+            <p
+              className="auth-error"
+              role="alert"
+            >
               {error}
             </p>
           )}
@@ -163,10 +264,11 @@ function Register({ onRegister, onShowLogin }) {
           <button
             type="submit"
             disabled={loading}
+            className="auth-submit-button"
           >
             {loading
               ? "Creating account..."
-              : "Register"}
+              : "Create Account"}
           </button>
 
         </form>

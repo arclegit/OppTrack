@@ -911,3 +911,159 @@ main {
     padding: 20px;
   }
 }
+/* =========================
+   Authentication
+   ========================= */
+
+.auth-container {
+  min-height: calc(100vh - 1px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 430px;
+  padding: 32px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  box-sizing: border-box;
+}
+
+.auth-card h1 {
+  margin: 0 0 8px;
+  font-size: 28px;
+  line-height: 1.25;
+  color: #111827;
+}
+
+.auth-description {
+  margin: 0 0 28px;
+  color: #6b7280;
+}
+
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 18px;
+}
+
+.auth-field label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.auth-field input {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 7px;
+  background: white;
+  color: #1f2937;
+  font-size: 15px;
+  box-sizing: border-box;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.auth-field input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px #dbeafe;
+}
+
+.auth-field input:disabled {
+  background: #f9fafb;
+  cursor: not-allowed;
+}
+
+.auth-help {
+  margin: 0;
+  color: #6b7280;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.auth-error {
+  margin: 4px 0 16px;
+  padding: 10px 12px;
+  border: 1px solid #fecaca;
+  border-radius: 7px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.auth-submit-button {
+  width: 100%;
+  padding: 11px 16px;
+  border: none;
+  border-radius: 7px;
+  background: #2563eb;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.auth-submit-button:hover {
+  background: #1d4ed8;
+}
+
+.auth-submit-button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.auth-switch {
+  margin: 22px 0 0;
+  text-align: center;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.auth-switch button {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #2563eb;
+  font-size: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.auth-switch button:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+
+/* =========================
+   Authentication Responsive
+   ========================= */
+
+@media (max-width: 480px) {
+  .auth-container {
+    padding: 24px 12px;
+  }
+
+  .auth-card {
+    padding: 24px 20px;
+  }
+
+  .auth-card h1 {
+    font-size: 24px;
+  }
+}
