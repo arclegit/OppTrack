@@ -6,89 +6,181 @@ import categories from "../data/categories";
 import scopes from "../data/scopes";
 import API_URL from "../config/api";
 
+
 function HomePage({
   savedOpportunities,
   selectedOpportunity,
   setSelectedOpportunity,
   onSaveOpportunity
 }) {
+
+  // ==================================================
+  // Opportunity state
+  // ==================================================
+
   const [opportunities, setOpportunities] =
     useState([]);
+
+
+  const [loading, setLoading] =
+    useState(true);
+
+
+  const [error, setError] =
+    useState(null);
+
+
+  const [retryCount, setRetryCount] =
+    useState(0);
+
+
+  // ==================================================
+  // Search and filter state
+  // ==================================================
 
   const [searchTerm, setSearchTerm] =
     useState("");
 
+
   const [selectedCategory, setSelectedCategory] =
     useState("All");
+
 
   const [selectedScope, setSelectedScope] =
     useState("All");
 
+
   const [locationTerm, setLocationTerm] =
     useState("");
+
 
   const [selectedDeadline, setSelectedDeadline] =
     useState("All");
 
-  // Load opportunities from PostgreSQL
-  useEffect(() => {
-    
-     fetch(
-  `${API_URL}/opportunities`
-)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(
-            "Failed to fetch opportunities"
-          );
-        }
 
-        return response.json();
-      })
-      .then((data) => {
-        setOpportunities(data);
-      })
-      .catch((error) => {
-        console.error(
-          "Failed to fetch opportunities:",
-          error
-        );
-      });
-  }, []);
+  // ==================================================
+  // Load opportunities from PostgreSQL
+  // ==================================================
+
+  useEffect(() => {
+
+    const loadOpportunities =
+      async () => {
+
+        setLoading(true);
+
+        setError(null);
+
+
+        try {
+
+          const response =
+            await fetch(
+              `${API_URL}/opportunities`
+            );
+
+
+          if (!response.ok) {
+
+            throw new Error(
+              "Failed to fetch opportunities"
+            );
+          }
+
+
+          const data =
+            await response.json();
+
+
+          setOpportunities(
+            data
+          );
+
+
+        } catch (error) {
+
+          console.error(
+            "Failed to fetch opportunities:",
+            error
+          );
+
+
+          setError(
+            "We couldn't load opportunities right now."
+          );
+
+
+        } finally {
+
+          setLoading(false);
+        }
+      };
+
+
+    loadOpportunities();
+
+  }, [retryCount]);
+
+
+  // ==================================================
+  // Retry opportunity loading
+  // ==================================================
+
+  const handleRetry =
+    () => {
+
+      setRetryCount(
+        (count) => count + 1
+      );
+    };
+
+
+  // ==================================================
+  // Filter opportunities
+  // ==================================================
 
   const filteredOpportunities =
     opportunities.filter((opportunity) => {
+
       const search =
         searchTerm.toLowerCase();
+
 
       const matchesSearch =
         opportunity.title
           .toLowerCase()
           .includes(search) ||
+
         opportunity.organization
           .toLowerCase()
           .includes(search) ||
+
         opportunity.category
           .toLowerCase()
           .includes(search) ||
+
         opportunity.location
           .toLowerCase()
           .includes(search) ||
+
         opportunity.skills.some((skill) =>
           skill
             .toLowerCase()
             .includes(search)
         );
 
+
       const matchesCategory =
         selectedCategory === "All" ||
         opportunity.category ===
           selectedCategory;
 
+
       const matchesScope =
         selectedScope === "All" ||
         opportunity.scope ===
           selectedScope;
+
 
       const matchesLocation =
         opportunity.location
@@ -97,17 +189,29 @@ function HomePage({
             locationTerm.toLowerCase()
           );
 
-      const today = new Date();
 
-      today.setHours(0, 0, 0, 0);
+      const today =
+        new Date();
 
-      const deadlineDate = new Date(
-        `${opportunity.deadline}T00:00:00`
+
+      today.setHours(
+        0,
+        0,
+        0,
+        0
       );
+
+
+      const deadlineDate =
+        new Date(
+          `${opportunity.deadline}T00:00:00`
+        );
+
 
       const daysUntilDeadline =
         (deadlineDate - today) /
         (1000 * 60 * 60 * 24);
+
 
       const deadlineStatus =
         daysUntilDeadline < 0
@@ -116,10 +220,12 @@ function HomePage({
           ? "Closing Soon"
           : "Upcoming";
 
+
       const matchesDeadline =
         selectedDeadline === "All" ||
         deadlineStatus ===
           selectedDeadline;
+
 
       return (
         matchesSearch &&
@@ -130,6 +236,11 @@ function HomePage({
       );
     });
 
+
+  // ==================================================
+  // Active filter count
+  // ==================================================
+
   const activeFilterCount = [
     selectedCategory !== "All",
     selectedScope !== "All",
@@ -137,30 +248,132 @@ function HomePage({
     selectedDeadline !== "All"
   ].filter(Boolean).length;
 
+
+  // ==================================================
+  // Loading state
+  // ==================================================
+
+  if (loading) {
+
+    return (
+      <main className="home-page">
+
+        <h1>
+          Find Your Next Opportunity
+        </h1>
+
+        <p>
+          Discover internships,
+          scholarships, hackathons,
+          jobs, and more.
+        </p>
+
+
+        <div className="app-state-card">
+
+          <h2>
+            Loading opportunities...
+          </h2>
+
+          <p>
+            We're fetching the latest opportunities
+            for you.
+          </p>
+
+        </div>
+
+      </main>
+    );
+  }
+
+
+  // ==================================================
+  // API error state
+  // ==================================================
+
+  if (error) {
+
+    return (
+      <main className="home-page">
+
+        <h1>
+          Find Your Next Opportunity
+        </h1>
+
+        <p>
+          Discover internships,
+          scholarships, hackathons,
+          jobs, and more.
+        </p>
+
+
+        <div className="app-state-card">
+
+          <h2>
+            Couldn't load opportunities
+          </h2>
+
+          <p>
+            {error}
+          </p>
+
+
+          <button
+            type="button"
+            onClick={handleRetry}
+            className="retry-button"
+          >
+            Try Again
+          </button>
+
+        </div>
+
+      </main>
+    );
+  }
+
+
+  // ==================================================
+  // Main page
+  // ==================================================
+
   return (
     <main className="home-page">
+
       {selectedOpportunity ? (
+
         <OpportunityDetails
+
           opportunity={
             selectedOpportunity
           }
-          isSaved={savedOpportunities.some(
-            (saved) =>
-              saved.id ===
-              selectedOpportunity.id
-          )}
+
+          isSaved={
+            savedOpportunities.some(
+              (saved) =>
+                saved.id ===
+                selectedOpportunity.id
+            )
+          }
+
           onBack={() =>
             setSelectedOpportunity(null)
           }
+
           onSave={
             onSaveOpportunity
           }
+
         />
+
       ) : (
+
         <>
+
           <h1>
             Find Your Next Opportunity
           </h1>
+
 
           <p>
             Discover internships,
@@ -168,20 +381,31 @@ function HomePage({
             jobs, and more.
           </p>
 
+
           <SearchBar
+
             onSearchChange={
               setSearchTerm
             }
+
           />
 
+
           <div className="filters-section">
-            <h2>Filters</h2>
+
+            <h2>
+              Filters
+            </h2>
+
 
             <div className="filters-grid">
+
               <div className="filter-control">
+
                 <label htmlFor="category">
                   Category
                 </label>
+
 
                 <select
                   id="category"
@@ -194,76 +418,102 @@ function HomePage({
                     )
                   }
                 >
+
                   <option value="All">
                     All
                   </option>
 
+
                   {categories.map(
                     (category) => (
+
                       <option
                         key={category}
                         value={category}
                       >
                         {category}
                       </option>
+
                     )
                   )}
+
                 </select>
+
               </div>
 
+
               <div className="filter-control">
+
                 <label htmlFor="scope">
                   Scope
                 </label>
 
+
                 <select
                   id="scope"
-                  value={selectedScope}
+                  value={
+                    selectedScope
+                  }
                   onChange={(event) =>
                     setSelectedScope(
                       event.target.value
                     )
                   }
                 >
+
                   <option value="All">
                     All
                   </option>
 
+
                   {scopes.map(
                     (scope) => (
+
                       <option
                         key={scope}
                         value={scope}
                       >
                         {scope}
                       </option>
+
                     )
                   )}
+
                 </select>
+
               </div>
 
+
               <div className="filter-control">
+
                 <label htmlFor="location">
                   Location
                 </label>
+
 
                 <input
                   id="location"
                   type="text"
                   placeholder="e.g. Kerala or Kochi"
-                  value={locationTerm}
+                  value={
+                    locationTerm
+                  }
                   onChange={(event) =>
                     setLocationTerm(
                       event.target.value
                     )
                   }
                 />
+
               </div>
 
+
               <div className="filter-control">
+
                 <label htmlFor="deadline">
                   Deadline
                 </label>
+
 
                 <select
                   id="deadline"
@@ -276,41 +526,57 @@ function HomePage({
                     )
                   }
                 >
+
                   <option value="All">
                     All
                   </option>
+
 
                   <option value="Upcoming">
                     Upcoming
                   </option>
 
+
                   <option value="Closing Soon">
                     Closing Soon
                   </option>
 
+
                   <option value="Expired">
                     Expired
                   </option>
+
                 </select>
+
               </div>
+
             </div>
 
+
             <div className="filter-status">
+
               {activeFilterCount ===
               0
+
                 ? "No filters applied"
+
                 : `${activeFilterCount} ${
                     activeFilterCount ===
                     1
                       ? "filter"
                       : "filters"
-                  } active`}
+                  } active`
+
+              }
+
             </div>
+
 
             <button
               type="button"
               className="clear-filters-button"
               onClick={() => {
+
                 setSelectedCategory(
                   "All"
                 );
@@ -324,50 +590,76 @@ function HomePage({
                 setSelectedDeadline(
                   "All"
                 );
+
               }}
             >
               Clear Filters
             </button>
+
           </div>
 
+
           <p className="result-count">
+
             {filteredOpportunities.length}{" "}
+
             {filteredOpportunities.length ===
             1
               ? "opportunity"
               : "opportunities"}{" "}
+
             found
+
           </p>
+
 
           {filteredOpportunities.length >
           0 ? (
+
             <div className="opportunity-list">
+
               {filteredOpportunities.map(
                 (opportunity) => (
+
                   <OpportunityCard
-                    key={opportunity.id}
+
+                    key={
+                      opportunity.id
+                    }
+
                     opportunity={
                       opportunity
                     }
+
                     onView={
                       setSelectedOpportunity
                     }
+
                   />
+
                 )
               )}
+
             </div>
+
           ) : (
+
             <p>
               No opportunities found.
               Try changing your search,
               category, scope, location,
               or deadline.
             </p>
+
           )}
+
         </>
+
       )}
+
     </main>
   );
 }
+
 
 export default HomePage;

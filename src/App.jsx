@@ -31,6 +31,14 @@ function App() {
     useState(true);
 
 
+  const [authError, setAuthError] =
+    useState(null);
+
+
+  const [authRetryCount, setAuthRetryCount] =
+    useState(0);
+
+
   const [authView, setAuthView] =
     useState("login");
 
@@ -64,6 +72,23 @@ function App() {
     const loadCurrentUser =
       async () => {
 
+        setAuthLoading(true);
+
+        setAuthError(null);
+
+
+        const controller =
+          new AbortController();
+
+
+        const timeoutId =
+          setTimeout(() => {
+
+            controller.abort();
+
+          }, 10000);
+
+
         try {
 
           const response =
@@ -71,13 +96,18 @@ function App() {
               `${API_URL}/auth/me`,
               {
                 credentials:
-                  "include"
+                  "include",
+
+                signal:
+                  controller.signal
               }
             );
 
 
           if (!response.ok) {
 
+            // A normal unauthenticated response
+            // is not a connection failure.
             setCurrentUser(null);
 
             return;
@@ -104,7 +134,17 @@ function App() {
           setCurrentUser(null);
 
 
+          setAuthError(
+            "We couldn't connect to OppTrack right now."
+          );
+
+
         } finally {
+
+          clearTimeout(
+            timeoutId
+          );
+
 
           setAuthLoading(false);
         }
@@ -113,7 +153,7 @@ function App() {
 
     loadCurrentUser();
 
-  }, []);
+  }, [authRetryCount]);
 
 
   // ==================================================
@@ -376,14 +416,76 @@ function App() {
 
 
   // ==================================================
+  // Retry authentication check
+  // ==================================================
+
+  const handleAuthRetry =
+    () => {
+
+      setAuthRetryCount(
+        (count) => count + 1
+      );
+    };
+
+
+  // ==================================================
   // Wait until authentication is checked
   // ==================================================
 
   if (authLoading) {
 
     return (
-      <div>
-        Checking authentication...
+      <div className="app-state-page">
+
+        <div className="app-state-card">
+
+          <h2>
+            Checking your session
+          </h2>
+
+          <p>
+            Please wait while OppTrack connects
+            to your account.
+          </p>
+
+        </div>
+
+      </div>
+    );
+  }
+
+
+  // ==================================================
+  // Authentication recovery state
+  // ==================================================
+
+  if (authError) {
+
+    return (
+      <div className="app-state-page">
+
+        <div className="app-state-card">
+
+          <h2>
+            OppTrack is temporarily unavailable
+          </h2>
+
+          <p>
+            We couldn't connect to the OppTrack
+            server. Your account data has not been
+            changed.
+          </p>
+
+          <button
+            type="button"
+            onClick={handleAuthRetry}
+            className="retry-button"
+          >
+            Try Again
+          </button>
+
+        </div>
+
       </div>
     );
   }
