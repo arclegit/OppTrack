@@ -129,5 +129,4 @@ Project Status
 OppTrack is currently deployed and functional, with real opportunity data and production authentication.
 Further improvements can include richer data ingestion, additional opportunity sources, stronger filtering, notifications, and other features as the project evolves.
 Built as a BCA portfolio project.
-
 Documentation prepared with AI assistance and reviewed by the project author.
