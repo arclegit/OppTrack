@@ -71,7 +71,7 @@ OppTrack was built as a practical portfolio project using React, Node.js, Expres
 
 ## Architecture
 
-```text
+
 User
   ↓
 Netlify
@@ -81,8 +81,9 @@ Render
 Node.js + Express Backend
   ↓ SQL
 Neon PostgreSQL
+
 The frontend communicates with the backend through REST API endpoints. The backend handles authentication, authorization, application tracking, saved opportunities, and database operations.
-The frontend never connects directly to PostgreSQL.
+
 Authentication
 OppTrack uses session-based authentication.
 Passwords are securely hashed using Node.js scrypt
@@ -94,27 +95,36 @@ User-specific database queries use the authenticated user's ID
 
 Live Application
 Frontend:
+
 https://nimble-mermaid-650643.netlify.app⁠�
+
 Backend API:
+
 https://opptrack-backend.onrender.com/api⁠�
+
 Local Development
+
 1. Clone the repository
 git clone https://github.com/arclegit/OppTrack.git
 cd OppTrack
+
 2. Install dependencies
 npm install
+
 3. Configure environment variables
 Create the required environment files for the frontend and backend.
+
 The backend requires the PostgreSQL connection configuration and authentication-related environment variables.
+
 The frontend uses:
+
 VITE_API_URL=http://localhost:5000/api
-4. Start the backend
-npm start
-5. Start the frontend
-npm run dev
-The application will then be available through the local Vite development server.
+
+
 Documentation
+
 Detailed project documentation is available in the docs directory.
+
 Architecture
 Authentication
 Database
@@ -123,10 +133,15 @@ Deployment
 Development
 Security
 Project Scope
+
 OppTrack is designed as an opportunity discovery and tracking system.
 It does not act as an application portal, recruitment company, authenticity guarantee, or replacement for opportunity providers. Users are directed to the original provider URLs when applying.
+
 Project Status
+
 OppTrack is currently deployed and functional, with real opportunity data and production authentication.
 Further improvements can include richer data ingestion, additional opportunity sources, stronger filtering, notifications, and other features as the project evolves.
 Built as a BCA portfolio project.
-Documentation prepared with AI assistance and reviewed by the project author.
+
+
+<sub><i>Documentation prepared with AI assistance and reviewed by the project author.</i></sub>
