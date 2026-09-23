@@ -144,4 +144,3 @@ Further improvements can include richer data ingestion, additional opportunity s
 Built as a BCA portfolio project.
 
 
-<sub><i>Documentation prepared with AI assistance and reviewed by the project author.</i></sub>

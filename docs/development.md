@@ -76,4 +76,3 @@ git add <files>
 git commit -m "<message>"
 git push origin main
 ```
-(AI-assisted documentation)

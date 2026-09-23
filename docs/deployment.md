@@ -51,4 +51,3 @@ Getting any one of these wrong is what causes "login works, but a refresh sends 
 
 Local dev deliberately mirrors production's shape but with different values, so a production fix doesn't require also breaking `localhost:5173` → `localhost:5000`. When changing CORS/cookie config, both origins should be checked afterward.
 
-(AI-assisted documentation)

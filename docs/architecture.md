@@ -45,4 +45,3 @@ Opportunity types: Internship, Scholarship, Hackathon, Competition, Job, Worksho
 ## Scope
 
 OppTrack is an opportunity **organization and tracking** tool — not an application portal, a recruiter, an AI matching engine, or a scraper. It doesn't submit applications or source opportunities automatically; it helps a student keep track of ones they've already found.
-(AI-assisted documentation) 

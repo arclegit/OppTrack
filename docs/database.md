@@ -83,4 +83,3 @@ One user can have many sessions, saved opportunities, and applications. One oppo
 ## User isolation
 
 Every read/write on `sessions`, `saved_opportunities`, and `applications` is filtered by `user_id = req.user.id` in the route handlers, so a user can never read or modify another user's rows by changing an ID in the request.
-(AI-assisted documentation)

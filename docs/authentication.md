@@ -54,4 +54,3 @@ The corresponding row in `sessions` is also deleted server-side, so the old toke
 | `Secure` | Cookie only sent over HTTPS — required in production, and required if `SameSite=None` |
 | `Path=/` | Cookie applies to the whole API, not one route |
 
-(AI-assisted documentation)
