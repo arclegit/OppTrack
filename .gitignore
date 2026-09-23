@@ -22,7 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-.env 
+.env*
+!.env.example
 # Authentication test files
 cookies.txt 
 opptrack_backup.sql
