@@ -17,11 +17,18 @@ OppTrack/
 │   │   ├── authRoutes.js
 │   │   ├── applicationRoutes.js
 │   │   └── savedOpportunityRoutes.js
+│   ├── middleware/
+│   │   └── authMiddleware.js     # session cookie → req.user
+│   ├── ingestion/
+│   │   ├── collectors/           # one file per external source
+│   │   ├── staging.js            # staged_opportunities table
+│   │   └── runIngestion.js       # npm run ingest
+│   ├── tests/                    # node:test suite (npm test)
+│   ├── app.js                    # Express app (no listener, for tests)
 │   ├── seed.js                   # populates the opportunities table
-│   └── server.js                 # Express app, CORS + session middleware
+│   └── server.js                 # entry point, starts the listener
 ├── public/
-├── .env                          # local environment variables (not committed)
-├── .env.production               # production build-time variables
+├── .env                          # local environment variables (not committed; .env* is git-ignored)
 └── package.json
 ```
 
@@ -44,6 +51,8 @@ No password-hashing library (bcrypt/argon2) is listed as a dependency — passwo
 | `npm run dev` | Vite dev server — frontend at `http://localhost:5173` |
 | `npm start` | `node server/server.js` — the Express backend, `http://localhost:5000` |
 | `npm run seed` | `node server/seed.js` — populates the `opportunities` table |
+| `npm test` | `node --test` — auth hashing + applications CRUD route tests |
+| `npm run ingest` | `node server/ingestion/runIngestion.js` — fetch external postings into `staged_opportunities` |
 | `npm run build` | Production frontend build |
 | `npm run preview` | Preview the production build locally |
 | `npm run lint` | ESLint |

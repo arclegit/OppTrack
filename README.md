@@ -1,5 +1,7 @@
 # OppTrack
 
+**Current release: v1.1.0** — see the GitHub [Releases](../../releases) page for version history.
+
 A full-stack Student Opportunity Tracker built to help students discover, save, and track internships, scholarships, hackathons, competitions, jobs, workshops, and other opportunities.
 
 OppTrack was built as a practical portfolio project using React, Node.js, Express, and PostgreSQL.
@@ -86,12 +88,32 @@ The frontend communicates with the backend through REST API endpoints. The backe
 
 Authentication
 OppTrack uses session-based authentication.
-Passwords are securely hashed using Node.js scrypt
+Passwords are hashed with Node.js scrypt (memory-hard KDF, per-password random salt, timing-safe comparison) — verified by the test suite
 Random session tokens are generated after login
 Only a SHA-256 hash of the session token is stored in the database
 The session token is sent through an HTTP-only cookie
-Protected routes verify the session before accessing user data
+Protected routes verify the session (including expiry) before accessing user data
 User-specific database queries use the authenticated user's ID
+
+## Testing
+
+A minimal test suite runs on Node's built-in test runner (no extra dependencies):
+
+```bash
+npm test
+```
+
+It covers password hashing/verification (`server/tests/auth.test.js`) and the applications CRUD routes, including auth enforcement and validation (`server/tests/applications.test.js`).
+
+## Opportunity Ingestion (v1.1.0)
+
+Collectors fetch raw postings from free public APIs (Remotive, Arbeitnow) and land them in a `staged_opportunities` table for review — plain HTTP + parsing, no AI:
+
+```bash
+npm run ingest
+```
+
+Details: [docs/ingestion.md](docs/ingestion.md)
 
 Live Application
 Frontend:
@@ -139,8 +161,8 @@ It does not act as an application portal, recruitment company, authenticity guar
 
 Project Status
 
-OppTrack is currently deployed and functional, with real opportunity data and production authentication.
-Further improvements can include richer data ingestion, additional opportunity sources, stronger filtering, notifications, and other features as the project evolves.
+OppTrack v1.1.0 is deployed and functional, with real opportunity data, production authentication, a verified password-hashing implementation, a test suite, and a source-ingestion pipeline feeding a staging table.
+Further improvements can include promotion of staged postings into the curated catalog, additional opportunity sources, richer filtering, notifications, and other features as the project evolves.
 Built as a BCA portfolio project.
 
 

@@ -1,12 +1,14 @@
 {
   "name": "opptrack",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "start": "node server/server.js",
     "seed": "node server/seed.js",
+    "ingest": "node server/ingestion/runIngestion.js",
+    "test": "node --test \"server/tests/*.test.js\"",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
